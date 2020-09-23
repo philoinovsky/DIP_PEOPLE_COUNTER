@@ -23,6 +23,7 @@ from imutils.video import VideoStream
 from imutils.video import FPS
 from pathlib import Path
 import imutils
+
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
@@ -269,12 +270,12 @@ while True:
 		writer.write(frame)
 
 	# show the output frame
-	cv2.imshow("Frame", frame)
-	key = cv2.waitKey(1) & 0xFF
+	#cv2.imshow("Frame", frame)
+	#key = cv2.waitKey(1) & 0xFF
 
 	# if the `q` key was pressed, break from the loop
-	if key == ord("q"):
-		break
+	#if key == ord("q"):
+		#break
 
 	# increment the total number of frames processed thus far and
 	# then update the FPS counter
@@ -299,5 +300,5 @@ else:
 	vs.release()
 
 # close any open windows
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()
 print("end")

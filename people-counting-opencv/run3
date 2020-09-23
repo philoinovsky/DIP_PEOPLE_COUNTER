@@ -1,0 +1,1 @@
+python3 /home/user/DIP_PEOPLE_COUNTER/people-counting-opencv/try.py -m mobilenet_ssd/MobileNetSSD_deploy.caffemodel -p mobilenet_ssd/MobileNetSSD_deploy.prototxt -i /home/user/DIP_PEOPLE_COUNTER/people-counting-opencv/videos_and_pics/example_04.mp4 -o /home/user/DIP_PEOPLE_COUNTER/people-counting-opencv/output/output_01.avi
