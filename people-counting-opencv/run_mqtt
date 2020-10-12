@@ -1,0 +1,4 @@
+python3 mqtt_concise.py \
+-m mobilenet_ssd/MobileNetSSD_deploy.caffemodel \
+-p mobilenet_ssd/MobileNetSSD_deploy.prototxt \
+-o output/output_mqtt.avi

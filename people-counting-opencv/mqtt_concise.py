@@ -10,7 +10,7 @@ from imutils.video import VideoStream
 from imutils.video import FPS
 from pathlib import Path
 import imutils
-import paho.mqtt as mqtt
+import paho.mqtt.client as mqtt
 import base64
 
 ap = argparse.ArgumentParser()
@@ -40,6 +40,7 @@ totalFrames = 0
 totalDown = 0
 totalUp = 0
 fps = FPS().start()
+counter = 0
 
 def decodeb64(jpg_as_text):
 	jpg_original = base64.b64decode(jpg_as_text)
@@ -50,10 +51,13 @@ def decodeb64(jpg_as_text):
 def on_message(client, userdata, msg):
 	# read image as base64 from MQTT
 	# print(msg.topic+" "+str(msg.payload))
+	global net, writer, ct, trackers, trackableObjects, totalFrames, totalDown, totalUp, fps, counter
+	sys.stdout.flush()
+	sys.stdout.write("\r[INFO] receive frame %d" % counter)
+	counter += 1
 	jpg_as_text = msg.payload
 	frame = decodeb64(jpg_as_text)
 	rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-	global writer
 	(H, W) = frame.shape[:2]
 	if args["output"] is not None and writer is None:
 		fourcc = cv2.VideoWriter_fourcc(*"MJPG")
@@ -127,18 +131,21 @@ def on_message(client, userdata, msg):
 
 client = mqtt.Client()
 client.connect("127.0.0.1", 1883, 60)
+client.subscribe("camera")
 client.on_message = on_message
 client.loop_start()
 
 def finish():
 	fps.stop()
-	print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
+	print("\n[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
 	print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 	if writer is not None:
 		writer.release()
 
+print("[INFO] Ready for video input")
 while True:
 	S = input()
 	if(S == "stop"):
-		# finish
 		finish()
+		client.disconnect()
+		exit(0)
