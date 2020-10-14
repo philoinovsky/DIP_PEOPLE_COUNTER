@@ -12,6 +12,7 @@ from pathlib import Path
 import imutils
 import paho.mqtt.client as mqtt
 import base64
+import math
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
@@ -95,6 +96,8 @@ def on_message(client, userdata, msg):
 			rects.append((startX, startY, endX, endY))
 	cv2.line(frame, (0, H // 2), (W, H // 2), (0, 255, 255), 2)
 	objects = ct.update(rects)
+	coordinatex = []
+	coordinatey = []
 	for (objectID, centroid) in objects.items():
 		to = trackableObjects.get(objectID, None)
 		if to is None:
@@ -115,6 +118,14 @@ def on_message(client, userdata, msg):
 		cv2.putText(frame, text, (centroid[0] - 10, centroid[1] - 10),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 		cv2.circle(frame, (centroid[0], centroid[1]), 4, (0, 255, 0), -1)
+		coordinatex.append(centroid[0])
+		coordinatey.append(centroid[1])
+	#for loop 
+	for j in range(len(coordinatex)): 
+		for k in range(j+1,len(coordinatex)):
+			distance = math.sqrt(pow(coordinatex[j]-coordinatex[k],2)+pow(coordinatey[j]-coordinatey[k],2))
+			if distance < 60:
+				cv2.line(frame, (coordinatex[j],coordinatey[j]), (coordinatex[k],coordinatey[k]), (255,0,0), 3) 
 	info = [
 		("Up", totalUp),
 		("Down", totalDown),

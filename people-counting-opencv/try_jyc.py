@@ -260,12 +260,9 @@ while True:
 	#for loop ends
 	for j in range(len(coordinatex)): 
 		for k in range(j+1,len(coordinatex)):
-			distance = sqrt(pow(coordinatex(j)-coordinatex(k),2)+pow(coordinatey(j)-coordinatey(k),2))
-			#cv2.line(image, start_point, end_point, color, thickness) 
-			color = (0,0,255)
-			if distance < 0.1 :
-				color  = (255,0,0)
-			cv2.line(frame, (coordinatex(j),coordinatey(j)), (coordinatex(k),coordinatey(k)), color, 2.0) 
+			distance = math.sqrt(pow(coordinatex[j]-coordinatex[k],2)+pow(coordinatey[j]-coordinatey[k],2))
+			if distance < 60:
+				cv2.line(frame, (coordinatex[j],coordinatey[j]), (coordinatex[k],coordinatey[k]), (255,0,0), 3) 
 
 	# construct a tuple of information we will be displaying on the
 	# frame
@@ -308,5 +305,4 @@ else:
 	vs.release()
 
 # close any open windows
-cv2.destroyAllWindows()
 print("end")

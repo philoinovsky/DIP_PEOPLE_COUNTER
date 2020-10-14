@@ -4,11 +4,12 @@ import cv2
 import imutils
 import base64
 import sys
+import math
 client = mqtt.Client()
 client.connect("128.199.208.181", 1883, 60)
 print("connecting to server...")
 sleep(2)
-video = "./videos_and_pics/example_01.mp4"
+video = "./videos_and_pics/example_04.mp4"
 vs = cv2.VideoCapture(video)
 newwidth = 500
 # newheight = 400
