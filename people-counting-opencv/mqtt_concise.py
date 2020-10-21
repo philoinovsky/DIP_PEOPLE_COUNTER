@@ -50,7 +50,6 @@ def updateoccupancy():
     level, room = ("s2_b4","s2_b4c_17")
     global delta
     print("number of people + " + str(delta))
-    # print("http://127.0.0.1:8000/"+level)
     data = requests.get("http://127.0.0.1:8000/"+level).json()
     id = -1
     for i, v in enumerate(data):
@@ -61,8 +60,9 @@ def updateoccupancy():
     link = "http://127.0.0.1:8000/" + level + "/" + room
     delta = 0
     data[i]['location'] = level
-    print(data[i])
-    return requests.put(url=link, data=json.dumps(data[i]))
+    headers = {'Authorization': 'Token e770960caa67450b109b2df12fc043012bc1abe6'}
+    # print(data[i])
+    return requests.put(url=link, data=json.dumps(data[i]), headers=headers)
 
 def decodeb64(jpg_as_text):
     jpg_original = base64.b64decode(jpg_as_text)
