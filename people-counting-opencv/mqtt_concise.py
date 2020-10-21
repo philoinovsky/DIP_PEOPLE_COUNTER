@@ -47,12 +47,11 @@ def set_interval(func, sec):
     return t
 
 def updateoccupancy():
-    level, room = ("s2_b4","1")
+    level, room = ("s2_b4","s2_b4c_17")
     global delta
+    print("number of people + " + str(delta))
     # print("http://127.0.0.1:8000/"+level)
-    r = requests.get("http://127.0.0.1:8000/"+level)
-    data = r.json()
-    N = len(data)
+    data = requests.get("http://127.0.0.1:8000/"+level).json()
     id = -1
     for i, v in enumerate(data):
         if v["name"] == room:
@@ -61,7 +60,9 @@ def updateoccupancy():
             break
     link = "http://127.0.0.1:8000/" + level + "/" + room
     delta = 0
-    return requests.put(url=link, data=json.dumps(data))
+    data[i]['location'] = level
+    print(data[i])
+    return requests.put(url=link, data=json.dumps(data[i]))
 
 def decodeb64(jpg_as_text):
     jpg_original = base64.b64decode(jpg_as_text)
@@ -75,7 +76,7 @@ def on_message(client, userdata, msg):
     global net, writer, ct, trackers, trackableObjects, totalFrames, \
         totalDown, totalUp, fps, counter, delta
     sys.stdout.flush()
-    sys.stdout.write("\r[INFO] receive frame %d" % counter)
+    sys.stdout.write("[INFO] receive frame %d\n" % counter)
     counter += 1
     jpg_as_text = msg.payload
     frame = decodeb64(jpg_as_text)
