@@ -261,7 +261,7 @@ while True:
 	for j in range(len(coordinatex)): 
 		for k in range(j+1,len(coordinatex)):
 			distance = math.sqrt(pow(coordinatex[j]-coordinatex[k],2)+pow(coordinatey[j]-coordinatey[k],2))
-			if distance < 60:
+			if distance < (0.1*coordinatey[j]+40):
 				cv2.line(frame, (coordinatex[j],coordinatey[j]), (coordinatex[k],coordinatey[k]), (255,0,0), 3) 
 
 	# construct a tuple of information we will be displaying on the

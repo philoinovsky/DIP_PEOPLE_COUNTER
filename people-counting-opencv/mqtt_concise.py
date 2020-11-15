@@ -64,6 +64,28 @@ def updateoccupancy():
     # print(data[i])
     return requests.put(url=link, data=json.dumps(data[i]), headers=headers)
 
+
+# def decodeb64(jpg_as_text):
+#     jpg_original = base64.b64decode(jpg_as_text)
+#     jpg_as_np = np.frombuffer(jpg_original, dtype=np.uint8)
+#     image_buffer = cv2.imdecode(jpg_as_np, flags=1)
+
+#     ht, wd, cc= image_buffer.shape
+#     # create new image of desired size and color (blue) for padding
+#     ww = 1000
+#     hh = 750
+#     color = (0,0,0)
+#     result = np.full((hh,ww,cc), color, dtype=np.uint8)
+
+#     # compute center offset
+#     xx = (ww - wd) // 2
+#     yy = (hh - ht) // 2
+
+#     # copy image_buffer image into center of result image
+#     result[yy:yy+ht, xx:xx+wd] = image_buffer
+#     # return image_buffer
+#     return result
+
 def decodeb64(jpg_as_text):
     jpg_original = base64.b64decode(jpg_as_text)
     jpg_as_np = np.frombuffer(jpg_original, dtype=np.uint8)
@@ -75,8 +97,9 @@ def on_message(client, userdata, msg):
     # print(msg.topic+" "+str(msg.payload))
     global net, writer, ct, trackers, trackableObjects, totalFrames, \
         totalDown, totalUp, fps, counter, delta
-    sys.stdout.flush()
-    sys.stdout.write("[INFO] receive frame %d\n" % counter)
+    # sys.stdout.flush()
+    # sys.stdout.write("[INFO] receive frame %d\n" % counter)
+    sys.stdout.write("#")
     counter += 1
     jpg_as_text = msg.payload
     frame = decodeb64(jpg_as_text)
@@ -150,7 +173,7 @@ def on_message(client, userdata, msg):
     for j in range(len(coordinatex)):
         for k in range(j+1,len(coordinatex)):
             distance = math.sqrt(pow(coordinatex[j]-coordinatex[k],2)+pow(coordinatey[j]-coordinatey[k],2))
-            if distance < 60:
+            if distance < (0.1*coordinatey[j]+40):
                 cv2.line(frame, (coordinatex[j],coordinatey[j]), (coordinatex[k],coordinatey[k]), (255,0,0), 3)
     info = [
         ("Up", totalUp),
